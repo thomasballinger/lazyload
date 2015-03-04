@@ -11,6 +11,16 @@ class _LazyModuleMarker(object):
     pass
 
 
+class NonLocal(object):
+    """
+    Simulates nonlocal keyword in Python 2
+    """
+    __slots__ = ['value']
+
+    def __init__(self, value):
+        self.value = value
+
+
 def make_lazy(module_path):
     """
     Mark that this module should not be imported until an
@@ -19,7 +29,7 @@ def make_lazy(module_path):
     sys_modules = sys.modules  # cache in the locals
 
     # store our 'instance' data in the closure.
-    module = [None]  # list because Python 2 closures are read-only
+    module = NonLocal(None)
 
     class LazyModule(_LazyModuleMarker):
         """
@@ -40,12 +50,12 @@ def make_lazy(module_path):
             """
             Override __getattribute__ to hide the implementation details.
             """
-            if module[0] is None:
+            if module.value is None:
                 del sys_modules[module_path]
-                module[0] = __import__(module_path)
+                module.value = __import__(module_path)
 
                 sys_modules[module_path] = __import__(module_path)
 
-            return getattr(module[0], attr)
+            return getattr(module.value, attr)
 
     sys_modules[module_path] = LazyModule()
