@@ -1,6 +1,4 @@
 from setuptools import setup
-import ast
-import os
 
 setup(name='lazyload',
       version='0.0.1',
