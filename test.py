@@ -14,6 +14,9 @@ class LazyLoadTestCase(unittest.TestCase):
         sys.modules.pop(self.modname, None)  # remove from the modules.
 
     def test_adds_to_modules(self):
+        """
+        Tests that `make_lazy` adds an entry to `sys.modules`.
+        """
         make_lazy(self.modname)
         abc = sys.modules.get(self.modname)
         self.assertIsNotNone(
@@ -27,12 +30,20 @@ class LazyLoadTestCase(unittest.TestCase):
         )
 
     def test_is_lazy_module(self):
+        """
+        Tests that `make_lazy` adds lazy module objects
+        instead of strict module objects.
+        """
         make_lazy(self.modname)
         mod = __import__(self.modname)
 
         self.assertIsInstance(mod, _LazyModuleMarker)
 
     def test_no_leaking_attributes(self):
+        """
+        Tests that consumers of the objects added by `make_lazy`
+        cannot accidently get the attributes off of the proxy.
+        """
         mod = __import__(self.modname)
         self.assertNotIsInstance(
             mod,
