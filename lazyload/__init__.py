@@ -17,11 +17,13 @@ def make_lazy(module_path):
     attribute is needed off of it.
     """
     sys_modules = sys.modules  # cache in the locals
-    module = None  # store our 'instance' data in the closure.
+
+    # store our 'instance' data in the closure.
+    module = [None]  # list because Python 2 closures are read-only
 
     class LazyModule(_LazyModuleMarker):
         """
-        Lazily import a module with minimal side effects.
+        A standin for a module to prevent it from being imported
         """
         def __mro__(self):
             """
@@ -38,13 +40,12 @@ def make_lazy(module_path):
             """
             Override __getattribute__ to hide the implementation details.
             """
-            nonlocal module
-            if module is None:
+            if module[0] is None:
                 del sys_modules[module_path]
-                module = __import__(module_path)
+                module[0] = __import__(module_path)
 
                 sys_modules[module_path] = __import__(module_path)
 
-            return getattr(module, attr)
+            return getattr(module[0], attr)
 
     sys_modules[module_path] = LazyModule()
