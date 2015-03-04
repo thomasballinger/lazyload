@@ -1,9 +1,7 @@
 from setuptools import setup
-import ast
-import os
 
 setup(name='lazyload',
-      version='0.0.1',
+      version='0.0.2',
       description='Force modules loaded later not to be loaded until attribute access',
       url='https://github.com/thomasballinger/lazyload',
       author='Thomas Ballinger',
