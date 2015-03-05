@@ -5,7 +5,7 @@ bpython starts up slowly in Python 2 at the moment due to importing requests tak
     import requests # nearly instant
     requests.get    # takes 1.2 seconds
 
-Seems to work in Python 2.7 and 3.4 (maybe others too?)
+Seems to work in Python 2.7, 3.4, and 3.5 (maybe others too?)
 
 Authors:
 * Thomas Ballinger
