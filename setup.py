@@ -14,5 +14,6 @@ setup(name='lazyload',
           'License :: OSI Approved :: MIT License',
           'Operating System :: POSIX',
           'Programming Language :: Python',
+          'Programming Language :: Python :: 3',
           ],
       )
